@@ -5,6 +5,7 @@ namespace Spatie\PartialCache;
 use Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
+use Illuminate\Support\Str;
 class PartialCacheServiceProvider extends ServiceProvider
 {
     /**
@@ -21,7 +22,7 @@ class PartialCacheServiceProvider extends ServiceProvider
             
             
             $bladeCompiler->directive($directive, function ($expression) {
-            if (starts_with($expression, '(')) {
+            if (Str::startsWith($expression, '(')) {
                 $expression = substr($expression, 1, -1);
             }
 
