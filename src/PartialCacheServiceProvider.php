@@ -16,6 +16,23 @@ class PartialCacheServiceProvider extends ServiceProvider
             __DIR__.'/../resources/config/partialcache.php' => config_path('partialcache.php'),
         ], 'config');
 
+        $this->app->afterResolving('blade.compiler', function (BladeCompiler $bladeCompiler) {
+            $directive = config('partialcache.directive');
+            
+            
+            $bladeCompiler->directive($directive, function ($expression) {
+            if (starts_with($expression, '(')) {
+                $expression = substr($expression, 1, -1);
+            }
+
+            return "<?php echo app()->make('partialcache')
+                ->cache(array_except(get_defined_vars(), ['__data', '__path']), {$expression}); ?>";
+        });
+
+             
+        });
+        
+        
        
     }
 
@@ -25,16 +42,9 @@ class PartialCacheServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../resources/config/partialcache.php', 'partialcache');
-         $directive = config('partialcache.directive');
+         
 
-        Blade::directive($directive, function ($expression) {
-            if (starts_with($expression, '(')) {
-                $expression = substr($expression, 1, -1);
-            }
-
-            return "<?php echo app()->make('partialcache')
-                ->cache(array_except(get_defined_vars(), ['__data', '__path']), {$expression}); ?>";
-        });
+        
         $this->app->singleton(PartialCache::class, PartialCache::class);
         $this->app->alias(PartialCache::class, 'partialcache');
     }
