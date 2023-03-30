@@ -27,7 +27,7 @@ class PartialCacheServiceProvider extends ServiceProvider
             }
 
             return "<?php echo app()->make('partialcache')
-                ->cache(array_except(get_defined_vars(), ['__data', '__path']), {$expression}); ?>";
+                ->cache(Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']), {$expression}); ?>";
         });
 
              
