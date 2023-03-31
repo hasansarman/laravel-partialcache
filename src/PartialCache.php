@@ -66,7 +66,7 @@ class PartialCache
 
         $mergeData = $mergeData ?: [];
 
-        $tags = $this->getTags($tag);
+        $tags = $this->getTags($data["mobile_view_tmp"]);
 
         $minutes = $this->resolveCacheDuration($minutes);
 
@@ -176,7 +176,7 @@ class PartialCache
      */
     protected function getTags($tag = null)
     {
-        $tags = [$this->cacheKey];
+        $tags = [$this->cacheKey,url()->current()];
 
         if ($tag) {
             if (! is_array($tag)) {
