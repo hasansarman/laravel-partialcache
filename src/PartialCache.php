@@ -66,7 +66,7 @@ class PartialCache
 
         $mergeData = $mergeData ?: [];
 
-        $tags = $this->getTags($data["mobile_view_tmp"]);
+        $tags = $this->getTags([$data["mobile_view_tmp"],session('currency')]);
 
         $minutes = $this->resolveCacheDuration($minutes);
 
